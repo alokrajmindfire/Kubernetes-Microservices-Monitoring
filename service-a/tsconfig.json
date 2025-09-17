@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "sourceMap": true,
+    "strict": true,
+    "outDir": "dist/",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "composite": true,
+    "types":["node", "jest"],
+    "typeRoots": ["./node_modules/@types","./types"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests"
+  ],
+  "exclude": [
+    "typings/*",
+    "node_modules"
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true
+  },
+}

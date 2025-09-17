@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "husky": "^9.1.7"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "lint:service:a": "cd service-a && npm run lint",
+    "lint:service:b": "cd service-b && npm run lint",
+    "lint:service:c": "cd service-c && npm run lint",
+    "format:service:a": "cd service-a && npm run format",
+    "format:service:b": "cd service-b && npm run format",
+    "format:service:c": "cd service-c && npm run format",
+    "lint:all": "npm run lint:service:a && npm run lint:service:b && npm run lint:service:c",
+    "test": "npm run format:service:a && npm run format:service:b && npm run format:service:c"
+  }
+}
