@@ -12,8 +12,8 @@ export class JobRepository {
   static async submitJob(type: string): Promise<string> {
     const jobId = uuidv4();
     const job: Job = { id: jobId, type };
-    const value = await jobProcessingQueue.add(JOB_QUEUE, JSON.stringify(job));
-    console.log('value', value);
+    await jobProcessingQueue.add(JOB_QUEUE, JSON.stringify(job));
+    // console.log('value', value?.queue.data.id);
     return jobId;
   }
 
