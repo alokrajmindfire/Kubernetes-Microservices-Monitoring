@@ -6,7 +6,7 @@ import { limiter } from './config/rate-limit';
 import { ErrorHandler } from './utils/Error';
 import { CORS_CONF, HELMET_CONFIG } from './utils/constants';
 import cookieParser from 'cookie-parser';
-
+import jobRoute from './routes/job.route';
 const app = express();
 
 app.use(cors(CORS_CONF));
@@ -25,9 +25,7 @@ app.get('/api/health', (_, res) => {
     services: {},
   });
 });
-app.use('/api/auth', (_, res) => {
-  res.sendStatus(200).send('Hello');
-});
+app.use('/api', jobRoute);
 
 app.use((req: Request, _: Response, next: NextFunction) => {
   const error = new Error(`Route not found - ${req.originalUrl}`);
