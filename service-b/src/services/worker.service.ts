@@ -3,11 +3,11 @@ import bcrypt from 'bcryptjs';
 export class WorkerService {
   async processJob(job: { id: string; type: string }) {
     switch (job.type) {
-      case 'calculatePrimes':
+      case 'primeCalc':
         return this.calculatePrimes(100_000);
       case 'bcryptHash':
         return this.bcryptHash('mySecretPassword', 10);
-      case 'generateAndSortArray':
+      case 'sortArray':
         return this.generateAndSortArray(100_000);
       default:
         throw new Error(`Unknown job type: ${job.type}`);

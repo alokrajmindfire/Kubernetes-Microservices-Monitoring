@@ -22,9 +22,17 @@ spec:
           - containerPort: 3001
         env:
           - name: REDIS_HOST
-            value: "redis://redis:6379"
+            value: "redis"
+          - name: REDIS_PORT
+            value: "6379"
           - name: PORT
             value: "3001"
         name: service-a
-        resources: {}
+        resources: 
+          requests:
+              cpu: "250m"
+              memory: "256Mi"
+          limits:
+              cpu: "500m"
+              memory: "512Mi"
 status: {}
