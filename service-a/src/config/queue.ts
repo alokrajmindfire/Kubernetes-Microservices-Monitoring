@@ -6,7 +6,7 @@ export const redisConnection = new IORedis(
   process.env.REDIS_HOST || 'redis://localhost:6379',
 );
 
-export const assetProcessingQueue = new Queue('asset-processing', {
+export const jobProcessingQueue = new Queue('asset-processing', {
   connection: redisConnection,
 });
 
