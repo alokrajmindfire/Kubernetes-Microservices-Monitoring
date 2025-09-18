@@ -11,6 +11,6 @@ spec:
     targetPort: 3002
   selector:
     app: service-b
-  type: LoadBalancer
+  type: ClusterIP
 status:
   loadBalancer: {}
