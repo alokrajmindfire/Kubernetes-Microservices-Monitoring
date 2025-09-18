@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import logger from './config/logger';
 import { app } from './app';
 import { createWorker } from './config/queue';
-import { WorkerController } from './controllers/worker.controller';
+import { handleJob } from './controllers/worker.controller';
 
 dotenv.config({
   path: './.env',
@@ -10,11 +10,9 @@ dotenv.config({
 const PORT = process.env.PORT || 3002;
 
 async function main() {
-  const workerController = new WorkerController();
-
   createWorker('job-processing', async (jobData) => {
     logger.info(`Worker received job: ${JSON.stringify(jobData)}`);
-    return await workerController.handleJob(jobData);
+    return await handleJob(jobData);
   });
 
   app.listen(PORT, () => {
