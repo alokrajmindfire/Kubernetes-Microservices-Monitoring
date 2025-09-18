@@ -1,4 +1,4 @@
-import { assetProcessingQueue } from '../config/queue';
+import { jobProcessingQueue } from '../config/queue';
 import { v4 as uuidv4 } from 'uuid';
 
 const JOB_QUEUE = 'job_queue';
@@ -12,16 +12,13 @@ export class JobRepository {
   static async submitJob(type: string): Promise<string> {
     const jobId = uuidv4();
     const job: Job = { id: jobId, type };
-    const value = await assetProcessingQueue.add(
-      JOB_QUEUE,
-      JSON.stringify(job),
-    );
+    const value = await jobProcessingQueue.add(JOB_QUEUE, JSON.stringify(job));
     console.log('value', value);
     return jobId;
   }
 
   static async getJobStatus(jobId: string): Promise<any> {
-    const job = await assetProcessingQueue.getJob(`job:${jobId}`);
+    const job = await jobProcessingQueue.getJob(`job:${jobId}`);
     if (job) {
       const status = await job.getState();
       return JSON.parse(status);

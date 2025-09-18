@@ -2,29 +2,29 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: service-a
-  name: service-a
+    app: service-b
+  name: service-b
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: service-a
+      app: service-b
   strategy: {}
   template:
     metadata:
       labels:
-        app: service-a
+        app: service-b
     spec:
       containers:
-      - image: alokraj889/service-a:0.1
+      - image: alokraj889/service-b:0.1
         imagePullPolicy: Always
         ports:
-          - containerPort: 3001
+          - containerPort: 3002
         env:
           - name: REDIS_HOST
             value: "redis://redis:6379"
           - name: PORT
-            value: "3001"
-        name: service-a
+            value: "3002"
+        name: service-b
         resources: {}
 status: {}

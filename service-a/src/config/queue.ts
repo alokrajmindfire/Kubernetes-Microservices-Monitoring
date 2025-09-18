@@ -6,7 +6,7 @@ export const redisConnection = new IORedis(
   process.env.REDIS_HOST || 'redis://localhost:6379',
 );
 
-export const assetProcessingQueue = new Queue('asset-processing', {
+export const jobProcessingQueue = new Queue('job-processing', {
   connection: redisConnection,
 });
 
@@ -22,7 +22,7 @@ export async function initializeQueue() {
     });
 
     logger.info('Redis connected successfully');
-    logger.info('Asset processing queue initialized');
+    logger.info('Job processing queue initialized');
   } catch (error) {
     logger.error('Redis connection failed:', error);
     throw error;
