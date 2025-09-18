@@ -28,5 +28,11 @@ spec:
           - name: PORT
             value: "3001"
         name: service-a
-        resources: {}
+        resources: 
+          requests:
+              cpu: "250m"
+              memory: "256Mi"
+          limits:
+              cpu: "500m"
+              memory: "512Mi"
 status: {}
