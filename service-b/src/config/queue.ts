@@ -3,7 +3,10 @@ import IORedis from 'ioredis';
 import logger from './logger';
 
 export const redisConnection = new IORedis(
-  process.env.REDIS_HOST || 'redis://localhost:6379',
+  process.env.REDIS_HOST || 'redis://redis:6379',
+  {
+    maxRetriesPerRequest: null,
+  },
 );
 
 export function createWorker(

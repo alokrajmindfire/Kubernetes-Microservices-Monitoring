@@ -22,7 +22,7 @@ export async function initializeQueue() {
     });
 
     logger.info('Redis connected successfully');
-    logger.info('Asset processing queue initialized');
+    logger.info('Job processing queue initialized');
   } catch (error) {
     logger.error('Redis connection failed:', error);
     throw error;

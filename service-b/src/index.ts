@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3002;
 async function main() {
   const workerController = new WorkerController();
 
-  createWorker('asset-processing', async (jobData) => {
+  createWorker('job-processing', async (jobData) => {
     logger.info(`Worker received job: ${JSON.stringify(jobData)}`);
     return await workerController.handleJob(jobData);
   });
