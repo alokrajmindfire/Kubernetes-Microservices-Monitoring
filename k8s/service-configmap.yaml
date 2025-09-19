@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-a-config
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  PORT: "3001"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-b-config
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  PORT: "3002"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-c-config
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  PORT: "3003"
