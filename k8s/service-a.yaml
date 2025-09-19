@@ -11,6 +11,6 @@ spec:
     targetPort: 3001
   selector:
     app: service-a
-  type: LoadBalancer
+  # type: LoadBalancer
 status:
   loadBalancer: {}

@@ -6,9 +6,6 @@ dotenv.config({
   path: './.env',
 });
 
-app.use('/', () => {
-  logger.info('Started');
-});
-app.listen(process.env.PORT || 3001, () => {
+app.listen(process.env.PORT || 3003, () => {
   logger.info(`Server is running at port : ${process.env.PORT}`);
 });
