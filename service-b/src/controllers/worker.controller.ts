@@ -3,6 +3,7 @@ import { WorkerService } from '../services/worker.service';
 import { redisConnection } from '../config/queue';
 import { Request, Response } from 'express';
 import { register } from '../metrics/metrics';
+import logger from '../config/logger';
 const ALLOWED_JOB_TYPES = ['primeCalc', 'bcryptHash', 'sortArray'];
 const workerService = new WorkerService();
 
@@ -61,7 +62,7 @@ export const handleJob = async (jobData: any) => {
     return { status: 'success', result };
   } catch (error: any) {
     metrics.jobErrors.inc();
-    console.error('Job processing error:', error);
+    logger.error('Job processing error:', error);
 
     return {
       status: 'error',
@@ -75,7 +76,7 @@ export const getMetrics = async (_req: Request, res: Response) => {
     res.set('Content-Type', register.contentType);
     res.end(await register.metrics());
   } catch (err: any) {
-    console.error('Error fetching metrics:', err);
+    logger.error('Error fetching metrics:', err);
     res.status(500).send(err.message);
   }
 };

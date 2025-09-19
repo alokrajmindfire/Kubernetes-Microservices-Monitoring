@@ -19,7 +19,7 @@ const getStatus = asyncHandler(async (req: Request, res: Response) => {
   const status = await JobService.getJobStatus(id);
   return res
     .status(201)
-    .json(new ApiResponse(201, status, 'Jobs status retrieved'));
+    .json(new ApiResponse(200, status, 'Jobs status retrieved'));
 });
 
 export { submitJob, getStatus };
