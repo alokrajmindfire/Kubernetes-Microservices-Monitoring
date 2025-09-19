@@ -7,6 +7,7 @@ import { ErrorHandler } from './utils/Error';
 import { CORS_CONF, HELMET_CONFIG } from './utils/constants';
 import cookieParser from 'cookie-parser';
 import jobRoute from './routes/job.route';
+import logger from './config/logger';
 const app = express();
 
 app.use(cors(CORS_CONF));
@@ -17,6 +18,11 @@ app.use('/api/', limiter);
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(cookieParser());
+
+app.get('/', (_, res) => {
+  logger.info('Service A is up and running');
+  res.send('Service A (metric) is running successfully');
+});
 
 app.get('/api/health', (_, res) => {
   res.status(200).json({
