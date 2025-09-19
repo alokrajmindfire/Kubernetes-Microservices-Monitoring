@@ -10,12 +10,9 @@
       "type": "stat",
       "title": "Total Jobs Processed",
       "id": 1,
-      "gridPos": { "x": 0, "y": 1, "w": 6, "h": 4 },
+      "gridPos": { "x": 0, "y": 1, "w": 6, "h": 8 },
       "targets": [
-        {
-          "expr": "sum(jobs_processed_total)",
-          "refId": "A"
-        }
+        { "expr": "sum(jobs_processed_total)", "refId": "A" }
       ]
     },
     {
@@ -54,18 +51,23 @@
         }
       ]
     },
-
     {
       "type": "gauge",
       "title": "Queue Length",
       "id": 4,
-      "gridPos": { "x": 0, "y": 18, "w": 6, "h": 4 },
+      "gridPos": { "x": 0, "y": 18, "w": 8, "h": 8 },
       "targets": [
-        {
-          "expr": "queue_length",
-          "refId": "A"
-        }
+        { "expr": "sum(queue_length)", "refId": "A" }
       ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "valueFontSize": "20%",
+            "titleFontSize": "40%"
+          }
+        },
+        "overrides": []
+      },
       "options": {
         "reduceOptions": {
           "calcs": ["lastNotNull"],
@@ -80,25 +82,37 @@
       "type": "stat",
       "title": "Total Jobs Submitted",
       "id": 5,
-      "gridPos": { "x": 6, "y": 18, "w": 6, "h": 4 },
+      "gridPos": { "x": 8, "y": 18, "w": 8, "h": 8 },
       "targets": [
-        {
-          "expr": "total_jobs_submitted",
-          "refId": "A"
-        }
-      ]
+        { "expr": "sum(total_jobs_submitted)", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "valueFontSize": "20%",
+            "titleFontSize": "40%"
+          }
+        },
+        "overrides": []
+      }
     },
     {
       "type": "stat",
       "title": "Total Jobs Completed",
       "id": 6,
-      "gridPos": { "x": 12, "y": 18, "w": 6, "h": 4 },
+      "gridPos": { "x": 16, "y": 18, "w": 8, "h": 8 },
       "targets": [
-        {
-          "expr": "total_jobs_completed",
-          "refId": "A"
-        }
-      ]
+        { "expr": "sum(total_jobs_completed)", "refId": "A" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "valueFontSize": "20%",
+            "titleFontSize": "40%"
+          }
+        },
+        "overrides": []
+      }
     },
     {
       "type": "timeseries",
@@ -106,16 +120,8 @@
       "id": 7,
       "gridPos": { "x": 0, "y": 22, "w": 24, "h": 8 },
       "targets": [
-        {
-          "expr": "total_jobs_submitted",
-          "legendFormat": "Submitted",
-          "refId": "A"
-        },
-        {
-          "expr": "total_jobs_completed",
-          "legendFormat": "Completed",
-          "refId": "B"
-        }
+        { "expr": "sum(total_jobs_submitted)", "legendFormat": "Submitted", "refId": "A" },
+        { "expr": "sum(total_jobs_completed)", "legendFormat": "Completed", "refId": "B" }
       ]
     }
   ]
