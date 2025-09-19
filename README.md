@@ -123,7 +123,7 @@ kubectl config current-context
 
 - **Grafana Dashboard**: Access via LoadBalancer IP or port-forward
   - Username: `admin`
-  - Password: `admin123`
+  - Password: `prom-operator`
 
 - **Prometheus**: Port-forward to access UI
   ```bash

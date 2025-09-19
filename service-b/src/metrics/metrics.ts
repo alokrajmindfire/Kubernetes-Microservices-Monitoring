@@ -1,6 +1,6 @@
 import client from 'prom-client';
 
-const register = new client.Registry();
+export const register = new client.Registry();
 
 const jobsProcessed = new client.Counter({
   name: 'jobs_processed_total',

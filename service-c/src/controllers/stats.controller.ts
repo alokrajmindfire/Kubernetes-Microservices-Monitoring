@@ -6,10 +6,12 @@ import {
   queueLengthGauge,
   register,
 } from '../metrics/metrics';
+import logger from '../config/logger';
 
 jobQueueEvents.on('waiting', async () => {
   const waiting = await jobQueue.getWaitingCount();
   const active = await jobQueue.getActiveCount();
+  logger.info(`Waiting: ${waiting}, Active: ${active}`);
   queueLengthGauge.set(waiting + active);
   totalJobsSubmitted.inc();
 });
@@ -17,6 +19,7 @@ jobQueueEvents.on('waiting', async () => {
 jobQueueEvents.on('completed', async () => {
   const waiting = await jobQueue.getWaitingCount();
   const active = await jobQueue.getActiveCount();
+  logger.info(`Waiting: ${waiting}, Active: ${active}`);
   queueLengthGauge.set(waiting + active);
   totalJobsCompleted.inc();
 });
@@ -28,7 +31,7 @@ const reconcileMetrics = async () => {
     const completed = await jobQueue.getCompletedCount();
     const failed = await jobQueue.getFailedCount();
     const delayed = await jobQueue.getDelayedCount();
-
+    logger.info(`Waiting: ${waiting}, Active: ${active}`);
     queueLengthGauge.set(waiting + active);
     totalJobsSubmitted.set(waiting + active + completed + failed + delayed);
     totalJobsCompleted.set(completed);
@@ -37,7 +40,7 @@ const reconcileMetrics = async () => {
   }
 };
 
-setInterval(reconcileMetrics, 60000);
+setInterval(reconcileMetrics, 1000);
 
 export const getStats = async (_req: Request, res: Response) => {
   try {
