@@ -20,13 +20,9 @@ spec:
         imagePullPolicy: Always
         ports:
           - containerPort: 3003
-        env:
-          - name: REDIS_HOST
-            value: "redis"
-          - name: REDIS_PORT
-            value: "6379"
-          - name: PORT
-            value: "3003"
+        envFrom:
+          - configMapRef:
+              name: service-c-config
         name: service-c
         resources:
           requests:
