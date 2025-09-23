@@ -1,82 +1,67 @@
-import { metrics } from '../metrics/metrics';
-import { WorkerService } from '../services/worker.service';
-import { redisConnection } from '../config/queue';
-import { Request, Response } from 'express';
-import { register } from '../metrics/metrics';
-import logger from '../config/logger';
-const ALLOWED_JOB_TYPES = ['primeCalc', 'bcryptHash', 'sortArray'];
-const workerService = new WorkerService();
+import { metrics } from '../metrics/metrics'
+import { WorkerService } from '../services/worker.service'
+import { redisConnection } from '../config/queue'
+import { Request, Response } from 'express'
+import { register } from '../metrics/metrics'
+import { asyncHandler } from '../utils/asyncHandler'
+const ALLOWED_JOB_TYPES = ['primeCalc', 'bcryptHash', 'sortArray']
+const workerService = new WorkerService()
 
 function validateJob(jobData: any) {
-  if (!jobData) throw new Error('Job data is empty');
+  if (!jobData) throw new Error('Job data is empty')
 
-  let job: { id: string; type: string; payload?: any };
+  let job: { id: string; type: string; payload?: any }
 
   if (typeof jobData === 'string') {
     try {
-      job = JSON.parse(jobData);
+      job = JSON.parse(jobData)
     } catch {
-      throw new Error('Invalid job format: must be valid JSON');
+      throw new Error('Invalid job format: must be valid JSON')
     }
   } else if (typeof jobData === 'object' && jobData !== null) {
-    job = jobData;
+    job = jobData
   } else {
-    throw new Error('Invalid job data type');
+    throw new Error('Invalid job data type')
   }
 
   if (!job.id || typeof job.id !== 'string') {
-    throw new Error('Job must contain a valid string "id"');
+    throw new Error('Job must contain a valid string "id"')
   }
   if (!job.type || typeof job.type !== 'string') {
-    throw new Error('Job must contain a valid string "type"');
+    throw new Error('Job must contain a valid string "type"')
   }
   if (!ALLOWED_JOB_TYPES.includes(job.type)) {
-    throw new Error(`Unsupported job type: ${job.type}`);
+    throw new Error(`Unsupported job type: ${job.type}`)
   }
   if (Object.prototype.hasOwnProperty.call(job, '__proto__')) {
-    throw new Error('Invalid job payload');
+    throw new Error('Invalid job payload')
   }
   if (job.payload && JSON.stringify(job.payload).length > 1e6) {
-    throw new Error('Payload too large');
+    throw new Error('Payload too large')
   }
 
-  return job;
+  return job
 }
 
 async function saveResult(jobId: string, result: any) {
-  const redisKey = `job:${encodeURIComponent(jobId)}:result`;
-  await redisConnection.set(redisKey, JSON.stringify(result), 'EX', 3600);
+  const redisKey = `job:${encodeURIComponent(jobId)}:result`
+  await redisConnection.set(redisKey, JSON.stringify(result), 'EX', 3600)
 }
 
-export const handleJob = async (jobData: any) => {
-  const start = Date.now();
+export const handleJob = asyncHandler(async (jobData: any) => {
+  const start = Date.now()
 
-  try {
-    const job = validateJob(jobData);
-    const result = await workerService.processJob(job);
-    await saveResult(job.id, result);
+  const job = validateJob(jobData)
+  const result = await workerService.processJob(job)
+  await saveResult(job.id, result)
 
-    metrics.jobsProcessed.inc();
-    metrics.jobProcessingTime.observe((Date.now() - start) / 1000);
+  metrics.jobsProcessed.inc()
+  metrics.jobProcessingTime.observe((Date.now() - start) / 1000)
 
-    return { status: 'success', result };
-  } catch (error: any) {
-    metrics.jobErrors.inc();
-    logger.error('Job processing error:', error);
+  return { status: 'success', result }
+})
 
-    return {
-      status: 'error',
-      message: error?.message || 'Job processing failed',
-    };
-  }
-};
-
-export const getMetrics = async (_req: Request, res: Response) => {
-  try {
-    res.set('Content-Type', register.contentType);
-    res.end(await register.metrics());
-  } catch (err: any) {
-    logger.error('Error fetching metrics:', err);
-    res.status(500).send(err.message);
-  }
-};
+export const getMetrics = asyncHandler(async (_req: Request, res: Response) => {
+  res.set('Content-Type', register.contentType)
+  res.end(await register.metrics())
+})

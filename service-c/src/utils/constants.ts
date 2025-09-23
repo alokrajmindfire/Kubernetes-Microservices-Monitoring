@@ -1,5 +1,5 @@
-import { CorsOptions } from 'cors';
-import { HelmetOptions } from 'helmet';
+import { CorsOptions } from 'cors'
+import { HelmetOptions } from 'helmet'
 
 const APP_CONFIG = {
   CORS_ORIGINS: (
@@ -10,21 +10,21 @@ const APP_CONFIG = {
 
   CORS_METHODS: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   CORS_HEADERS: ['Content-Type', 'Authorization', 'X-Requested-With'],
-};
+}
 
 export const CORS_CONF: CorsOptions = {
   origin: (origin, callback) => {
     if (!origin || APP_CONFIG.CORS_ORIGINS.includes(origin)) {
-      callback(null, true);
+      callback(null, true)
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'))
     }
   },
   methods: APP_CONFIG.CORS_METHODS,
   allowedHeaders: APP_CONFIG.CORS_HEADERS,
   credentials: true,
   optionsSuccessStatus: 200,
-};
+}
 
 export const HELMET_CONFIG: HelmetOptions = {
   contentSecurityPolicy:
@@ -43,4 +43,4 @@ export const HELMET_CONFIG: HelmetOptions = {
   hidePoweredBy: true,
   noSniff: true,
   referrerPolicy: { policy: 'no-referrer' },
-};
+}
