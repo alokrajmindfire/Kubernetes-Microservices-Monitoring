@@ -39,8 +39,9 @@ const reconcileMetrics = async () => {
     console.error('Error reconciling metrics:', err);
   }
 };
-
-setInterval(reconcileMetrics, 1000);
+if (process.env.NODE_ENV !== 'test') {
+  setInterval(reconcileMetrics, 1000);
+}
 
 export const getStats = async (_req: Request, res: Response) => {
   try {

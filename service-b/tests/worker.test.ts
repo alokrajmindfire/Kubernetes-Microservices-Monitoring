@@ -3,7 +3,13 @@ import {app} from '../src/app'
 
 import { handleJob } from "../src/controllers/worker.controller";
 import { WorkerService } from "../src/services/worker.service";
+beforeAll(() => {
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
 
+afterAll(() => {
+  (console.error as jest.Mock).mockRestore();
+});
 jest.mock("../src/services/worker.service");
 const MockWorkerService = WorkerService as jest.MockedClass<typeof WorkerService>;
 
