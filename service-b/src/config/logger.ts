@@ -1,9 +1,9 @@
-import winston from 'winston';
+import winston from 'winston'
 const logFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.errors({ stack: true }),
   winston.format.json(),
-);
+)
 
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
@@ -30,7 +30,7 @@ const logger = winston.createLogger({
       maxFiles: 5,
     }),
   ],
-});
+})
 
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
@@ -40,11 +40,11 @@ if (process.env.NODE_ENV !== 'production') {
         winston.format.printf((info) => {
           return `${info.timestamp} [${info.level.toUpperCase()}]: ${info.message}${
             info.stack ? '\n' + info.stack : ''
-          }`;
+          }`
         }),
       ),
     }),
-  );
+  )
 }
 
-export default logger;
+export default logger

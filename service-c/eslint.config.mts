@@ -13,6 +13,15 @@ export default defineConfig([
     rules: {
       "prefer-const": "warn",
       "no-constant-binary-expression": "error",
+      "no-unused-vars": "warn",
+      "no-undef": "error",
+      "eqeqeq": "error",
+      "indent": ["error", 2],
+      "quotes": ["error", "single"],
+      "semi": ["error", "always"],
+      "comma-dangle": ["error", "always-multiline"],
+      "no-console": "warn",
+      "no-trailing-spaces": "error"      
     },
   },
   tseslint.configs.recommended,
