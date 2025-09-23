@@ -16,7 +16,7 @@ export class JobRepository {
     await jobProcessingQueue.add(JOB_QUEUE, job, { jobId });
 
     // console.log('value', jobId);
-    logger.info(`Job id: ${jobId}`)
+    logger.info(`Job id: ${jobId}`);
     return jobId;
   }
 
