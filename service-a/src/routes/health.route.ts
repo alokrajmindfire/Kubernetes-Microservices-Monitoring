@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { getMetrics } from '../controllers/worker.controller'
 import { getHealth, getRoot } from '../controllers/health.controller'
 
 const router = Router()
@@ -7,7 +6,5 @@ const router = Router()
 router.route('/').get(getRoot)
 
 router.route('/api/health').get(getHealth)
-
-router.route('/metrics').get(getMetrics)
 
 export default router

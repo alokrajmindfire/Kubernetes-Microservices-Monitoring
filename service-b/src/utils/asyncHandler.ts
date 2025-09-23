@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import logger from '../config/logger'
 
 type AsyncFn = (req: Request, res: Response, next: NextFunction) => Promise<any>
 
@@ -21,7 +22,7 @@ const asyncHandler =
         statusCode = knownErr.statusCode || knownErr.status || 500
         message = knownErr.message || message
       }
-
+      logger.error('Error: ', err)
       res.status(statusCode).json({
         success: false,
         message,

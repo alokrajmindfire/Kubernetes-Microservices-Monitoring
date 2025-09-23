@@ -1,10 +1,10 @@
-import { Router } from 'express';
-import { getStatus, submitJob } from '../controllers/job.controller';
+import { Router } from 'express'
+import { getStatus, submitJob } from '../controllers/job.controller'
 
-const router = Router();
+const router = Router()
 
-router.route('/submit').post(submitJob);
+router.route('/submit').post(submitJob)
 
-router.route('/status/:id').get(getStatus);
+router.route('/status/:id').get(getStatus)
 
-export default router;
+export default router

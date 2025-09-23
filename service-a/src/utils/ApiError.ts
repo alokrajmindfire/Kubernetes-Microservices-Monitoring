@@ -1,8 +1,8 @@
 class ApiError extends Error {
-  public statusCode: number;
-  public data: unknown;
-  public success: boolean;
-  public errors: unknown[];
+  public statusCode: number
+  public data: unknown
+  public success: boolean
+  public errors: unknown[]
 
   constructor(
     statusCode: number,
@@ -10,20 +10,20 @@ class ApiError extends Error {
     errors: unknown[] = [],
     stack: string = '',
   ) {
-    super(message);
+    super(message)
 
-    this.statusCode = statusCode;
-    this.message = message;
-    this.data = null;
-    this.success = false;
-    this.errors = errors;
+    this.statusCode = statusCode
+    this.message = message
+    this.data = null
+    this.success = false
+    this.errors = errors
 
     if (stack) {
-      this.stack = stack;
+      this.stack = stack
     } else {
-      Error.captureStackTrace(this, this.constructor);
+      Error.captureStackTrace(this, this.constructor)
     }
   }
 }
 
-export { ApiError };
+export { ApiError }
