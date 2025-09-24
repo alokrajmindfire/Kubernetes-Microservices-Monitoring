@@ -1,22 +1,29 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 
 echo "Building microservices Docker images..."
 
-# Build Service A
-echo "Building Service A ..."
-docker build -t <DOCKER_USERNAME>/service-a:0.1 .
-docker push  <DOCKER_USERNAME>/service-a:0.1
+# Function to build and push a service
+build_service() {
+  local service_name=$1
+  local image_tag=$2
 
+  echo "Building $service_name..."
+  cd "../$service_name" || { echo "Directory $service_name not found"; exit 1; }
+
+  docker build -t "$image_tag" .
+  docker push "$image_tag"
+  echo "$service_name built and pushed successfully!"
+}
+
+# Build Service A
+build_service "service-a" "alokraj889/service-a:0.1"
 
 # Build Service B
-echo "Building Service B (Worker)..."
-docker build -t  <DOCKER_USERNAME>/service-b:0.1 .
-docker push  <DOCKER_USERNAME>/service-b:0.1
+build_service "service-b" "alokraj889/service-b:0.1"
 
 # Build Service C
-docker build -t  <DOCKER_USERNAME>/service-c:0.1 .
-docker push  <DOCKER_USERNAME>/service-c:0.1
+build_service "service-c" "alokraj889/service-c:0.1"
 
 echo "All images built and pushed successfully!"

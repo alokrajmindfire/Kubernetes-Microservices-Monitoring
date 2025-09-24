@@ -124,7 +124,7 @@ Parameters:
 minikube service -n monitoring monitoring-grafana
 ```
 
-2. Default login: `admin / admin`.
+2. Default login: `admin / prom-operator`.
 
 3. Import dashboard `job-queue-dashboard.json`:
 
@@ -141,6 +141,7 @@ minikube service -n monitoring monitoring-grafana
    * kubectl logs -f deploy/service-a
    * kubectl logs -f deploy/service-b
    * kubectl logs -f deploy/service-c
+   * kubectl get hpa service-b-hpa -n default --watch <!-- To monitor hpa scaling -->
 
 
 ## 8. Cleanup

@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3002
 
 async function main() {
   createWorker('job-processing', async (jobData) => {
-    logger.info(`Worker received job: ${JSON.stringify(jobData)}`)
+    // logger.info(`Worker received job: ${JSON.stringify(jobData)}`)
     return await handleJob(jobData)
   })
 
