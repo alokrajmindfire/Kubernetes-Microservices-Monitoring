@@ -18,12 +18,12 @@ build_service() {
 }
 
 # Build Service A
-build_service "service-a" "alokraj889/service-a:0.1"
+build_service "service-a" "<your-docker-username>/service-a:0.1"
 
 # Build Service B
-build_service "service-b" "alokraj889/service-b:0.1"
+build_service "service-b" "<your-docker-username>/service-b:0.1"
 
 # Build Service C
-build_service "service-c" "alokraj889/service-c:0.1"
+build_service "service-c" "<your-docker-username>/service-c:0.1"
 
 echo "All images built and pushed successfully!"

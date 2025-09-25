@@ -16,7 +16,7 @@ spec:
         app: service-a
     spec:
       containers:
-      - image: alokraj889/service-a:0.1
+      - image: <your-docker-username>/service-a:0.1
         imagePullPolicy: Always
         ports:
           - containerPort: 3001
