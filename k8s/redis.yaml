@@ -1,8 +1,46 @@
-apiVersion: apps/v1
-kind: Deployment
+# Namespace (optional but recommended)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: caching
+---
+# ConfigMap for Redis config tuning
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: caching
+data:
+  redis.conf: |
+    maxmemory 1gb
+    maxmemory-policy allkeys-lru
+    appendonly yes
+    save 60 1000
+    tcp-keepalive 60
+    maxclients 10000
+---
+# ClusterIP Service (apps use redis:6379)
+apiVersion: v1
+kind: Service
 metadata:
   name: redis
+  namespace: caching
 spec:
+  selector:
+    app: redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+  type: ClusterIP
+---
+# Redis StatefulSet with persistence
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: caching
+spec:
+  serviceName: redis
   replicas: 1
   selector:
     matchLabels:
@@ -14,17 +52,48 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:latest
+          image: redis:7.2
           ports:
             - containerPort: 6379
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis
-spec:
-  ports:
-    - port: 6379
-      targetPort: 6379
-  selector:
-    app: redis
+          resources:
+            requests:
+              cpu: "1"
+              memory: "2Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: redis-config
+              mountPath: /usr/local/etc/redis/redis.conf
+              subPath: redis.conf
+          command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "redis-cli ping | grep PONG"
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 6
+      volumes:
+        - name: redis-config
+          configMap:
+            name: redis-config
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+

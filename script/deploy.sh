@@ -2,7 +2,7 @@
 set -e
 
 echo "Starting Minikube..."
-minikube start --driver=docker
+minikube start --memory=7783 --cpus=4 --driver=docker
 
 echo "Enabling Ingress addon..."
 minikube addons enable ingress
@@ -15,7 +15,7 @@ kubectl delete pod -n kube-system -l "k8s-app=metrics-server"
 echo "Creating namespaces..."
 kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 kubectl create namespace default --dry-run=client -o yaml | kubectl apply -f -
-
+cd ..
 echo "Applying Redis..."
 kubectl apply -f k8s/redis.yaml
 

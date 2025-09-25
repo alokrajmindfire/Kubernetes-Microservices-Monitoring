@@ -9,9 +9,21 @@ export const redisConnection = new IORedis({
   host: redisHost,
   port: redisPort,
   maxRetriesPerRequest: null,
-  enableReadyCheck: false,
+  enableReadyCheck: true,
+  retryStrategy: (times) => Math.min(times * 50, 2000),
 })
 
+redisConnection.on('connect', () => {
+  logger.info('Worker connected to Redis')
+})
+
+redisConnection.on('error', (err) => {
+  if (err.message.includes('LOADING')) {
+    logger.info('Redis still loading dataset, retrying...')
+  } else {
+    logger.error('Redis error:', err)
+  }
+})
 export function createWorker(
   queueName: string,
   processor: (jobData: any) => Promise<any>,
@@ -22,7 +34,7 @@ export function createWorker(
       logger.info(`Processing job ${job.id} of type ${job.name}`)
       return await processor(job.data)
     },
-    { connection: redisConnection, concurrency: 5 },
+    { connection: redisConnection, concurrency: 20 },
   )
 
   worker.on('completed', (job, result) => {

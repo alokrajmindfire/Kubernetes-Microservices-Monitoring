@@ -4,6 +4,7 @@ import { redisConnection } from '../config/queue'
 import { Request, Response } from 'express'
 import { register } from '../metrics/metrics'
 import { asyncHandler } from '../utils/asyncHandler'
+import logger from '../config/logger'
 const ALLOWED_JOB_TYPES = ['primeCalc', 'bcryptHash', 'sortArray']
 const workerService = new WorkerService()
 
@@ -48,19 +49,28 @@ async function saveResult(jobId: string, result: any) {
   await redisConnection.set(redisKey, JSON.stringify(result), 'EX', 3600)
 }
 
-export const handleJob = asyncHandler(async (jobData: any) => {
+export const handleJob = async (jobData: any) => {
   const start = Date.now()
 
-  const job = validateJob(jobData)
-  const result = await workerService.processJob(job)
-  await saveResult(job.id, result)
+  try {
+    const job = validateJob(jobData)
+    const result = await workerService.processJob(job)
+    await saveResult(job.id, result)
 
-  metrics.jobsProcessed.inc()
-  metrics.jobProcessingTime.observe((Date.now() - start) / 1000)
+    metrics.jobsProcessed.inc()
+    metrics.jobProcessingTime.observe((Date.now() - start) / 1000)
 
-  return { status: 'success', result }
-})
+    return { status: 'success', result }
+  } catch (error: any) {
+    metrics.jobErrors.inc()
+    logger.error('Job processing error:', error)
 
+    return {
+      status: 'error',
+      message: error?.message || 'Job processing failed',
+    }
+  }
+}
 export const getMetrics = asyncHandler(async (_req: Request, res: Response) => {
   res.set('Content-Type', register.contentType)
   res.end(await register.metrics())
