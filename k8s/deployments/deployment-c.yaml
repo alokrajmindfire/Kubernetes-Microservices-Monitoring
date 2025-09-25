@@ -16,7 +16,7 @@ spec:
         app: service-c
     spec:
       containers:
-      - image: alokraj889/service-c:0.1
+      - image: <your-docker-username>/service-c:0.1
         imagePullPolicy: Always
         ports:
           - containerPort: 3003
