@@ -34,7 +34,7 @@ export function createWorker(
       logger.info(`Processing job ${job.id} of type ${job.name}`)
       return await processor(job.data)
     },
-    { connection: redisConnection, concurrency: 5 },
+    { connection: redisConnection, concurrency: 20 },
   )
 
   worker.on('completed', (job, result) => {

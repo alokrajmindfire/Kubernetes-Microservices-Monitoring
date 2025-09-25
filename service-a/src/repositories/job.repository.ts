@@ -15,7 +15,6 @@ export class JobRepository {
     const job: Job = { id: jobId, type }
     await jobProcessingQueue.add(JOB_QUEUE, job, { jobId })
 
-    // console.log('value', jobId);
     logger.info(`Job id: ${jobId}`)
     return jobId
   }
