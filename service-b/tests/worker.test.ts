@@ -1,10 +1,10 @@
 import request from 'supertest'
-import {app} from '../src/app'
+import { app } from '../src/app'
 
 import { handleJob } from "../src/controllers/worker.controller";
 import { WorkerService } from "../src/services/worker.service";
 beforeAll(() => {
-  jest.spyOn(console, 'error').mockImplementation(() => {});
+  jest.spyOn(console, 'error').mockImplementation(() => { });
 });
 
 afterAll(() => {
@@ -23,11 +23,15 @@ describe("Service B Routes", () => {
   it("GET /api/health should return OK status", async () => {
     const res = await request(app).get("/api/health");
     expect(res.status).toBe(200);
+    // console.log(res.body)
+
     expect(res.body).toMatchObject({
-      status: "OK",
-      services: { worker: "running" },
+      statusCode: 200,
+      success: true,
+      message: "Service is healthy",
     });
   });
+
 
   it("GET /metrics should return metrics", async () => {
     const res = await request(app).get("/metrics");

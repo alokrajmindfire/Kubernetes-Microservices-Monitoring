@@ -1,6 +1,6 @@
 import request from 'supertest'
-import {app} from '../src/app'
-import {JobService} from '../src/services/job.service'
+import { app } from '../src/app'
+import { JobService } from '../src/services/job.service'
 
 jest.mock('../src/services/job.service');
 
@@ -24,10 +24,24 @@ describe('Job Routes', () => {
         .post('/api/submit')
         .send({});
 
+      // console.log(res.body);
+
       expect(res.status).toBe(400);
       expect(res.body.success).toBe(false);
-      expect(res.body.message).toBe('Job type required');
+
+      const parsedErrors = JSON.parse(res.body.message);
+
+      expect(parsedErrors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: 'Invalid input: expected string, received undefined',
+            path: ['type'],
+          }),
+        ])
+      );
     });
+
+
   });
 
   describe('GET /api/status/:id', () => {

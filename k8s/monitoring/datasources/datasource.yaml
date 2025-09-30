@@ -13,4 +13,4 @@ data:
         type: prometheus
         access: proxy
         isDefault: true
-        url: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+        url: http://monitoring-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090

@@ -13,8 +13,12 @@ describe("Service C - Stats and Metrics Routes", () => {
 
   it("GET /stats should return queue stats", async () => {
     const res = await request(app).get("/stats").expect(200);
+    // console.log(res.body);
 
-    expect(res.body.status).toBe("success");
+    expect(res.body.success).toBe(true);
+    expect(res.body.statusCode).toBe(200);
+    expect(res.body.message).toBe("Job stats fetched successfully");
+
     expect(res.body.data).toEqual({
       totalJobsSubmitted: 11,
       totalJobsCompleted: 5,
@@ -22,6 +26,7 @@ describe("Service C - Stats and Metrics Routes", () => {
       avgProcessingTime: 1.5,
     });
   });
+
 
   it("GET /metrics should return prometheus metrics", async () => {
     const res = await request(app).get("/metrics").expect(200);
@@ -35,17 +40,25 @@ describe("Service C - Stats and Metrics Routes", () => {
     jobQueue.getWaitingCount.mockRejectedValueOnce(new Error("Redis down"));
 
     const res = await request(app).get("/stats").expect(500);
+    // console.log(res.body);
 
-    expect(res.body.status).toBe("error");
+    expect(res.status).toBe(500);
+    expect(res.body.success).toBe(false);
     expect(res.body.message).toBe("Redis down");
   });
+
 
   it("should handle error in /metrics gracefully", async () => {
     const { register } = require("../src/metrics/metrics");
     register.metrics.mockRejectedValueOnce(new Error("Prometheus error"));
 
     const res = await request(app).get("/metrics").expect(500);
+    console.log(res.body, res.text)
+    const jsonResponse = JSON.parse(res.text);
 
-    expect(res.text).toBe("Prometheus error");
+    expect(jsonResponse.success).toBe(false);
+    expect(jsonResponse.message).toBe("Prometheus error");
   });
+
+
 });
